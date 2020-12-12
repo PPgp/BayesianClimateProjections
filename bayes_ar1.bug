@@ -1,0 +1,21 @@
+model {
+  for (t in 1:n_years)
+  {
+#    true_anomaly[t] <- model_forecast[t] + z[t]
+#    z[t] <- true_anomaly[t] - model_forecast[t]
+    true_anomaly[t] <- observed_anomaly[t] - delta[t]
+    delta[t] ~ dnorm(0, tau_delta[t])
+    tau_delta[t] <- pow(sd_delta[t], -2)
+  }
+  for (t in 1:(n_years-1))
+  {
+#    observed_anomaly[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]) + model_forecast[t + 1] + delta[t + 1], tau_w)
+    true_anomaly[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]) + model_forecast[t + 1], tau_w)
+#   z[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]), tau_w)
+  }
+  rho ~ dunif(0, 1)
+#  tau_w ~ dgamma(1, 1)
+  tau_w <- pow(sd_w, -2)
+#  sd_w <- pow(tau_w, -1/2)
+  sd_w ~ dunif(0,0.1)
+}
