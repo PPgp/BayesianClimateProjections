@@ -1,0 +1,136 @@
+Note: Unit of reference levels is Tonnes of CO2 emission per $10000 of GDP if country promised on intensity,,,,,,
+"Else, the unit is million tonnes of CO2 emissions.",,,,,,
+,,,,,,
+country_code,Country,year,reference_year,type,types,target_year_emission_intensity_level
+AFG,Afghanistan,2030,2005,BAU,Emission,2.936061333
+AGO,Angola,2030,2005,BAU,Emission,34.84233867
+ALB,Albania,2030,2009,BAU,Emission,5.345538
+ARG,Argentina,2030,2005,BAU,Emission,205.213536
+AUS,Australia,2030,2005,Emission,Emission,285.70586
+AUT,Austria,2030,1990,Emission,Emission,37.4022
+AZE,Azerbaijan,2030,1990,Emission,Emission,41.04576667
+BDI,Burundi,2030,2005,BAU,Emission,0.79772
+BEL,Belgium,2030,1990,Emission,Emission,72.1512
+BFA,Burkina Faso,2030,2007,BAU,Emission,8.302459
+BGD,Bangladesh,2030,2011,BAU,Emission,219.9611957
+BGR,Bulgaria,2030,1990,Emission,Emission,47.2252
+BIH,Bosnia and Herzegovina,2030,1990,Emission,Emission,19.44429667
+BLR,Belarus,2030,1990,Emission,Emission,72.53136
+BRA,Brazil,2025,2005,Emission,Emission,218.78472
+BRB,Barbados,2025,2008,Emission,Emission,1.280326667
+BWA,Botswana,2030,2010,Emission,Emission,3.9831
+CAF,Central African Republic,2050,2010,BAU,Emission,0.406032
+CAN,Canada,2030,2005,Emission,Emission,401.8116667
+CHE,Switzerland,2030,1990,Emission,Emission,22.10083333
+CHL,Chile,2030,2007,Intensity,Intensity,1.512309824
+CHN,China,2030,2005,Intensity,Intensity,2.375381571
+CIV,Ivory coast,2030,NA,BAU,Intensity,1.143503195
+CMR,Cameroon,2035,2010,BAU,Emission,12.33899333
+COD,Democratic Republic of the Congo,2030,2000,BAU,Emission,1.210418
+COG,Congo,2025,2015,BAU,Emission,5.288389333
+COL,Colombia,2030,2010,BAU,Emission,91.09652933
+COM,Comoros,2030,2010,BAU,Emission,0.092605333
+CRI,Costa Rica,2030,2012,Emission,Emission,5.8245
+CYP,Cyprus,2030,1990,Emission,Emission,2.7742
+CZE,Czech Republic,2030,1990,Emission,Emission,97.0596
+DEU,Germany,2030,1990,Emission,Emission,631.807
+DJI,Djibouti,2030,2010,BAU,Emission,0.70312
+DMA,Dominica,2030,2014,Emission,Emission,0.074616667
+DNK,Denmark,2030,1990,Emission,Emission,32.5534
+DOM,Dominican Republic,2030,2010,Emission,Emission,15.76575
+DZA,Algeria,2030,NA,BAU,Intensity,2.572092094
+ECU,Ecuador,2025,NA,BAU,Intensity,1.929206934
+ESP,Spain,2030,1990,Emission,Emission,138.886
+EST,Estonia,2030,1990,Emission,Emission,22.2574
+ETH,Ethiopia,2030,2010,Emission,Emission,6.387773333
+FIN,Finland,2030,1990,Emission,Emission,34.1946
+FRA,France,2030,1990,Emission,Emission,239.9628
+GAB,Gabon,2025,2000,Emission,Emission,4.693333333
+GBR,United Kingdom,2030,1990,Emission,Emission,357.4384
+GEO,Georgia,2030,2013,Intensity,Intensity,1.446293069
+GHA,Ghana,2030,2010,BAU,Emission,32.045145
+GIN,Guinea,2030,1994,Emission,Emission,1.08779
+GMB,Gambia,2030,NA,BAU,Intensity,0.799363739
+GNQ,Equatorial Guinea,2030,2010,Emission,Emission,3.742933333
+GRC,Greece,2030,1990,Emission,Emission,50.061
+GTM,Guatemala,2030,2005,BAU,Emission,19.10538667
+HND,Honduras,2030,2012,BAU,Emission,11.67833333
+HRV,Croatia,2030,1990,Emission,Emission,14.0448
+HTI,Haiti,2030,2000,BAU,Emission,3.401387
+HUN,Hungary,2030,1990,Emission,Emission,44.1012
+IDN,Indonesia,2030,2005,BAU,Emission,388.4673173
+IND,India,2030,2005,Intensity,Intensity,2.051251866
+IRL,Ireland,2030,1990,Emission,Emission,19.7186
+IRN,Iran,2030,NA,BAU,Intensity,4.782504596
+ISL,Iceland,2030,1990,Emission,Emission,1.2892
+ISR,Israel,2030,2005,Emission,Emission,74.0311
+ITA,Italy,2030,1990,Emission,Emission,261.1708
+JAM,Jamaica,2030,2005,BAU,Emission,13.26905067
+JOR,Jordan,2030,2006,BAU,Emission,36.96
+JPN,Japan,2030,2013,Emission,Emission,972.83582
+KAZ,Kazakhstan,2030,1990,Emission,Emission,233.8092167
+KEN,Kenya,2030,2010,BAU,Emission,16.68964
+KGZ,Kyrgyzstan,2030,NA,BAU,Intensity,3.163416222
+KHM,Cambodia,2030,2010,BAU,Emission,8.520966667
+KOR,South Korea,2030,2010,BAU,Emission,536.631755
+LBN,Lebanon,2030,2015,BAU,Emission,33.68706733
+LBR,Liberia,2030,2000,BAU,Emission,0.350826667
+LCA,Saint Lucia,2030,2010,BAU,Emission,0.394863333
+LKA,Sri Lanka,2030,NA,BAU,Intensity,0.816918641
+LSO,Lesotho,2030,2000,BAU,Emission,4.042188333
+LTU,Lithuania,2030,1990,Emission,Emission,21.5006
+LUX,Luxembourg,2030,1990,Emission,Emission,7.0928
+LVA,Latvia,2030,1990,Emission,Emission,11.8778
+MAR,Morocco,2030,2010,BAU,Emission,84.26572
+MDA,Moldova,2030,1990,Emission,Emission,8.47704
+MDG,Madagascar,2030,2010,BAU,Emission,2.296734
+MEX,Mexico,2030,2013,Intensity,Intensity,1.413495756
+MLI,Mali,2030,2015,Intensity,Intensity,0.46779517
+MLT,Malta,2030,1990,Emission,Emission,1.3024
+MNE,Montenegro,2030,1990,Emission,Emission,1.7864
+MNG,Mongolia,2030,2010,BAU,Emission,27.63933333
+MRT,Mauritania,2030,2012,BAU,Emission,6.721616
+MUS,Mauritius,2030,2014,Emission,Emission,4.05856
+MWI,Malawi,2030,NA,BAU,Intensity,0.515304187
+MYS,Malaysia,2030,2005,Intensity,Intensity,1.990120953
+NAM,Namibia,2030,2010,Intensity,Intensity,1.499104429
+NER,Niger,2030,2008,BAU,Emission,2.101194333
+NGA,Nigeria,2030,2015,Intensity,Intensity,0.813824935
+NLD,Netherlands,2030,1990,Emission,Emission,97.4336
+NOR,Norway,2030,1990,Emission,Emission,21.439
+NZL,New Zealand,2030,1990,Emission,Emission,17.81266667
+OMN,Oman,2030,NA,BAU,Intensity,3.942474459
+PER,Peru,2030,2010,Emission,Emission,70.25817333
+PHL,Philippines,2030,NA,BAU,Intensity,0.483018035
+POL,Poland,2030,1990,Emission,Emission,225.7882
+PRT,Portugal,2030,1990,Emission,Emission,27.2426
+PRY,Paraguay,2030,2011,Emission,Emission,9.5766
+ROU,Romania,2030,1990,Emission,Emission,102.5222
+RUS,Russia,2030,1990,Emission,Emission,1943.83475
+SEN,Senegal,2030,2005,BAU,Emission,15.63338333
+SGP,Singapore,2030,2005,Intensity,Intensity,1.069362928
+SLE,Sierra Leone,2030,1990,Intensity,Intensity,0.872786644
+SRB,Serbia,2030,1990,Emission,Emission,52.17318333
+SVK,Slovakia,2030,1990,Emission,Emission,37.1888
+SVN,Slovenia,2030,1990,Emission,Emission,9.0508
+SWE,Sweden,2030,1990,Emission,Emission,34.5532
+SYC,Seychelles,2030,2010,Emission,Emission,0.315003333
+TCD,Chad,2030,2010,BAU,Emission,1.446566
+TGO,Togo,2030,2010,Emission,Emission,2.345904
+THA,Thailand,2030,2015,BAU,Emission,443.953598
+TJK,Tajikistan,2030,1990,Emission,Emission,7.392
+TKM,Turkmenistan,2030,2000,Emission,Emission,37.53566667
+TTO,Trinidad and Tobago,2030,2013,BAU,Emission,101.2652373
+TUN,Tunisia,2030,2010,Intensity,Intensity,2.177976643
+TUR,Turkey,2030,2012,BAU,Emission,768.42216
+TZA,Tanzania,2030,2015,BAU,Emission,15.50835367
+UGA,Uganda,2030,2000,BAU,Emission,2.36236
+UKR,Ukraine,2030,1990,Emission,Emission,424.0302
+URY,Uruguay,2030,1990,Intensity,Intensity,0.796639307
+USA,USA,2025,2005,Emission,Emission,4540.8583
+UZB,Uzbekistan,2030,2010,Intensity,Intensity,3.210268938
+VEN,Venezuela,2030,2011,BAU,Emission,234.6224467
+VNM,Viet Nam,2030,2010,BAU,Emission,418.897875
+YEM,Yemen,2030,2010,BAU,Emission,42.00999
+ZMB,Zambia,2030,2010,BAU,Emission,2.691333333
+ZWE,Zimbabwe,2030,2010,BAU,Emission,23.984268
