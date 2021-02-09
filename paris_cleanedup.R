@@ -30,7 +30,6 @@ library(rworldmap)
 library(car)
 
 
-setwd("~/Documents/UW Courses/Research/CO2_Data")
 data.location <- "NatureData/"
 sims.location <- paste0(data.location, "Simulations/")
 plot.location <- "NatureData/Plots/"
@@ -49,10 +48,9 @@ load(file=paste0(data.location, "data_medium_new.Rda"))
 paris.objective <- read.csv(paste0(data.location, 'paris_agreement_new.csv'))
 paris.objective.category <- read.csv(paste0(data.location, 'paris_agreement_summary.csv'))
 
-setwd("~/Documents/Research/Climate/Data")
-load("~/Documents/Research/Climate/Data/cleaned_all_data.Rda")
-load("~/Documents/Research/Climate/Data/real_data.Rda")
-load("~/Documents/Research/Climate/Data/proj.evals.2015.adjusted.new.Rda")
+load("/cleaned_all_data.Rda")
+load("/real_data.Rda")
+load("/proj.evals.2015.adjusted.new.Rda")
 
 ## Paris Agreement Objectives
 paris.objective <- paris.objective[, c(1, 3:8)]

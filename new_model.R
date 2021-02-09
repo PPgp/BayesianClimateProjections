@@ -2,7 +2,6 @@ library(ggplot2)
 library(reshape2)
 library(plotly)
 
-setwd("~/Documents/Research/Climate/Data")
 all_files <- list.files(pattern = '*.dat', path = 'CMIP_data')
 string_part1 <- sapply(all_files, function(x) {return (strsplit(x, '_')[[1]][1])})
 string_part2 <- sapply(all_files, function(x) {return (strsplit(x, '_')[[1]][2])})

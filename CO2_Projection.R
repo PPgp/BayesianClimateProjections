@@ -27,7 +27,7 @@ library(scales)
 library(MASS)
 
 library(car)
-setwd("~/Documents/UW Courses/Research/CO2_Data")
+setwd("/path/")
 
 #=========================================================
 
