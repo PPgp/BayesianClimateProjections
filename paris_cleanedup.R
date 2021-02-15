@@ -30,6 +30,7 @@ library(rworldmap)
 library(car)
 
 
+#setwd("~/Documents/UW Courses/Research/CO2_Data")
 data.location <- "NatureData/"
 sims.location <- paste0(data.location, "Simulations/")
 plot.location <- "NatureData/Plots/"
@@ -43,14 +44,13 @@ n.trajectories <- 1000
 load(file=paste0(data.location, paste0("poppreds_formatted_", year.start, "_", year.end, ".rda")))
 load(file=paste0(data.location, "model_results_ar1const_2015.rda"))
 load(file=paste0(data.location, "proj_evals_ar1const_2015.rda"))
-load(file=paste0(data.location, "proj_evals_ar1const_2010.rda"))
 load(file=paste0(data.location, "data_medium_new.Rda"))
 paris.objective <- read.csv(paste0(data.location, 'paris_agreement_new.csv'))
 paris.objective.category <- read.csv(paste0(data.location, 'paris_agreement_summary.csv'))
 
-load("/cleaned_all_data.Rda")
-load("/real_data.Rda")
-load("/proj.evals.2015.adjusted.new.Rda")
+load("cleaned_all_data.Rda")
+load("real_data.Rda")
+# load("~/Documents/Research/Climate/Data/proj.evals.2015.adjusted.new.Rda")
 
 ## Paris Agreement Objectives
 paris.objective <- paris.objective[, c(1, 3:8)]
@@ -78,54 +78,6 @@ eu.category <- data.frame(Country = EU.countries,
 paris.objective.category <- rbind(paris.objective.category, eu.category)
 paris.objective.category.included <- subset(paris.objective.category, country_code %in% unique(data.medium$Isocode))
 
-calculate_a <- function(X)
-{
-  c_func <-function(a)
-  {
-    return ((1-exp(-a * 85))/a - X/36.6)
-  }
-  library(pracma)
-  root <- bisect(fun = c_func, 0.00001,0.3)$root
-  return (root)
-}
-
-X <- c(2083, 1579, 839, 471)
-rates <- numeric(4)
-for(i in 1:4) {rates[i] <- calculate_a(X[i])}
-
-extras <- matrix(nrow=10, ncol=3)
-count <- 1
-for (country in c('USA', 'JPN', 'DEU', 'RUS', 'CAN', 'KOR', 'BRA', 'GBR'))
-{
-  l <- which(paris.objective$country_code == country)
-  old_year <- paris.objective$old_year[l]
-  type <- paris.objective$Type[l]
-  size <- ifelse(type == 'Emission', paris.objective$size[l], size <- paris.objective$ratio[l])
-  year_ind <- paris.objective$year[l] - 2014
-  ref_level <- data.medium$CO2.total[(data.medium$Isocode == country) & 
-                                       (data.medium$Year == old_year)] * (1 - size / 100)
-  rate <- ref_level / data.medium$CO2.total[(data.medium$Isocode == country) & 
-                                              (data.medium$Year == 2015)]
-  rate <- 1 - rate^(1/(paris.objective$year[l] - 2015))
-  for(j in 1:3)
-  {
-    obj <- data.medium$CO2.total[(data.medium$Isocode == country) & 
-                                   (data.medium$Year == 2015)] * (1 - rate * rates[j+1]/rates[1])^(paris.objective$year[l] - 2015)
-    extras[count, j] <- (1-obj/data.medium$CO2.total[(data.medium$Isocode == country) & 
-                                                       (data.medium$Year == old_year)])*100/size
-  }
-  count <- count + 1
-  
-}
-extras[9,1] <- (1-(1-((1-(308.1 * 0.4/141.7)^(1/15)) * 1.802)) ^15*141.7/308.1)/0.6
-extras[9,2] <- (1-(1-((1-(308.1 * 0.4/141.7)^(1/15)) * rates[3]/rates[1])) ^15*141.7/308.1)/0.6
-extras[9,3] <- (1-(1-((1-(308.1 * 0.4/141.7)^(1/15)) * rates[4]/rates[1])) ^15*141.7/308.1)/0.6
-extras[10,1] <- (1-(1-((1-((333.4/59) * 0.67/(633.3/113.7))^(1/15)) * 1.802)) ^15*(633.3/113.7)/(333.4/59))/0.33
-extras[10,2] <- (1-(1-((1-((333.4/59) * 0.67/(633.3/113.7))^(1/15)) * rates[3]/rates[1])) ^15*(633.3/113.7)/(333.4/59))/0.33
-extras[10,3] <- (1-(1-((1-((333.4/59) * 0.67/(633.3/113.7))^(1/15)) * rates[4]/rates[1])) ^15*(633.3/113.7)/(333.4/59))/0.33
-extras <- as.data.frame(extras)
-extras$country <- c(c('USA', 'JPN', 'DEU', 'RUS', 'CAN', 'KOR', 'BRA', 'GBR'), 'CHN', 'IND')
-xtable(extras)
 # China, USA, India, Japan, Germany, Russia, Canada, Korea, Brazil, UK,
 convert.traj <- function(proj.evals, paris.objective, policy.continue=FALSE)
 {
@@ -572,11 +524,11 @@ proj.evals.2015.adjusted$trajs.annual.quants.usa <-
 
 rcp.list <- list()
 for (rcp.num in c("RCP26", "RCP45", "RCP60", "RCP85")) {
-  rcp.list[[rcp.num]] <- read.csv(paste0("IPCC_", rcp.num, "_data.csv"))
+  rcp.list[[rcp.num]] <- read.csv(paste0(data.location, "IPCC_", rcp.num, "_data.csv"))
 }
 rcp.colors <- c("green", "red", "black", "purple")
 
-rcp.carbon.yearly.tmp <- read.csv(paste0("rcp_db_carbon_emissions.csv"),
+rcp.carbon.yearly.tmp <- read.csv(paste0(data.location, "rcp_db_carbon_emissions.csv"),
                                   nrows=4)
 rcp.carbon.yearly <- rcp.carbon.yearly.tmp[, c("Scenario", "Unit",
                                                paste0("X", c(2000, 2005, seq(2010, 2100, by=10))))]
@@ -717,49 +669,6 @@ for (index in (selected_indices + 1))
   all_hist_df <- rbind(all_hist_df, temp_df)
 }
 
-
-### Converted Trajectories first
-# make_bugs_data <- function(cleaned_all_data, real_data)
-# {
-#   year <- 1861:2005
-#   model_forecast <- cleaned_all_data$Average_Diff$modmean[cleaned_all_data$Average_Diff$year %in% year]
-#   hadCrut_observation <- real_data$V6[real_data$V1 %in% year]
-#   sd_hadCrut <- real_data$V3[real_data$V1 %in% year]
-#   model_forecast_anomaly <- model_forecast - mean(model_forecast[year %in% (1861:1880)])
-#   observed_anomaly <- hadCrut_observation - mean(hadCrut_observation[year %in% (1861:1880)])
-#   n_years <- length(year)
-#   
-#   return (list(n_years = n_years, 
-#                sd_delta = sd_hadCrut,
-#                model_forecast = model_forecast_anomaly,
-#                observed_anomaly = observed_anomaly))
-# }
-# 
-# fit_ar1_model <- function(cleaned_all_data, real_data,
-#                           n.iterations = 11000, n.adapt = 1000, n.chains = 3, thin = 1, 
-#                           model_name = 'bayes_ar1.bug',
-#                           var.list = c("true_anomaly", "rho", "sd_w"))
-# {
-#   library(rjags)
-#   library(coda)
-#   library(reshape2)
-#   print("Calling make.bugs.data")
-#   jags.input <- make_bugs_data(cleaned_all_data, real_data)
-#   # browser()
-#   print("Successfully called make.bugs.data")
-#   jags.out <- jags.model(model_name, 
-#                          data=jags.input,
-#                          n.chains=n.chains, n.adapt=n.adapt)
-#   jags.output <- coda.samples(jags.out,
-#                               var.list,
-#                               n.iter=n.iterations,
-#                               thin=thin)
-#   return (list(input = jags.input, output = jags.output))
-#   
-# }
-# 
-# fit_result <- fit_ar1_model(cleaned_all_data, real_data, n.iterations = 10000)
-
 make_bugs_data <- function(all_hist_df, model_x)
 {
   year <- 1861:2005
@@ -834,8 +743,7 @@ fit_ar1_model <- function(all_hist_df, model_x,
 #   {
 #     year <- min(year.range[1], 2005) + i
 #     co2_combined <- c(cum_co2[i], as.numeric(rcp_co2_adjusted[rcp_co2_adjusted$year == year, -5]))
-#     index_
-traj <- which(sort(co2_combined, index.return = TRUE)$ix == 1)
+#     index_traj <- which(sort(co2_combined, index.return = TRUE)$ix == 1)
 #     if (index_traj == 1)
 #     {
 #       # browser()
@@ -1111,24 +1019,6 @@ for (i in 1:39)
   proj_list_adjusted_usa$zt_projection <- cbind(proj_list_adjusted_usa$projection, all_projections[[model_x]]$zt_projection)
 }
 
-# proj_list <- project_temperature(fit_result$output[[1]], proj.evals.2015.ar1.const$trajs.annual.worldwide, 
-#                                  rcp.carbon.cum.complete, rcp_temp_data, 
-#                                  year.range = c(2015, 2100), n.traj = 1000)
-# 
-# proj_list_adjusted <- project_temperature(fit_result$output[[1]], 
-#                                           proj.evals.2015.adjusted$trajs.annual.worldwide, 
-#                                           rcp.carbon.cum.complete, rcp_temp_data, 
-#                                           year.range = c(2015, 2100), n.traj = 1000)
-# 
-# proj_list_adjusted_cont <- project_temperature(fit_result$output[[1]], 
-#                                                proj.evals.2015.adjusted$trajs.annual.worldwide.cont, 
-#                                                rcp.carbon.cum.complete, rcp_temp_data,
-#                                                year.range = c(2015, 2100), n.traj = 1000)
-# 
-# proj_list_adjusted_cont_test <- project_temperature(fit_result$output[[1]], 
-#                                                proj.evals.2015.adjusted$trajs.annual.worldwide.cont, 
-#                                                rcp.carbon.cum.complete, rcp_temp_data,
-#                                                year.range = c(2015, 2100), n.traj = 1000, ratio_co2 = 0)
 
 ### Try plot map
 map <- getMap(resolution = "coarse")
@@ -1940,4 +1830,52 @@ head(test_df)
 
 ggplot(data= test_df) + geom_line(aes(x=year, y =val, col = group))
 
+#### Extra percentage
+calculate_a <- function(X)
+{
+  c_func <-function(a)
+  {
+    return ((1-exp(-a * 85))/a - X/36.6)
+  }
+  library(pracma)
+  root <- bisect(fun = c_func, 0.00001,0.3)$root
+  return (root)
+}
 
+X <- c(2083, 1579, 839, 471)
+rates <- numeric(4)
+for(i in 1:4) {rates[i] <- calculate_a(X[i])}
+
+extras <- matrix(nrow=10, ncol=3)
+count <- 1
+for (country in c('USA', 'JPN', 'DEU', 'RUS', 'CAN', 'KOR', 'BRA', 'GBR'))
+{
+  l <- which(paris.objective$country_code == country)
+  old_year <- paris.objective$old_year[l]
+  type <- paris.objective$Type[l]
+  size <- ifelse(type == 'Emission', paris.objective$size[l], size <- paris.objective$ratio[l])
+  year_ind <- paris.objective$year[l] - 2014
+  ref_level <- data.medium$CO2.total[(data.medium$Isocode == country) & 
+                                       (data.medium$Year == old_year)] * (1 - size / 100)
+  rate <- ref_level / data.medium$CO2.total[(data.medium$Isocode == country) & 
+                                              (data.medium$Year == 2015)]
+  rate <- 1 - rate^(1/(paris.objective$year[l] - 2015))
+  for(j in 1:3)
+  {
+    obj <- data.medium$CO2.total[(data.medium$Isocode == country) & 
+                                   (data.medium$Year == 2015)] * (1 - rate * rates[j+1]/rates[1])^(paris.objective$year[l] - 2015)
+    extras[count, j] <- (1-obj/data.medium$CO2.total[(data.medium$Isocode == country) & 
+                                                       (data.medium$Year == old_year)])*100/size
+  }
+  count <- count + 1
+  
+}
+extras[9,1] <- (1-(1-((1-(308.1 * 0.4/141.7)^(1/15)) * 1.802)) ^15*141.7/308.1)/0.6
+extras[9,2] <- (1-(1-((1-(308.1 * 0.4/141.7)^(1/15)) * rates[3]/rates[1])) ^15*141.7/308.1)/0.6
+extras[9,3] <- (1-(1-((1-(308.1 * 0.4/141.7)^(1/15)) * rates[4]/rates[1])) ^15*141.7/308.1)/0.6
+extras[10,1] <- (1-(1-((1-((333.4/59) * 0.67/(633.3/113.7))^(1/15)) * 1.802)) ^15*(633.3/113.7)/(333.4/59))/0.33
+extras[10,2] <- (1-(1-((1-((333.4/59) * 0.67/(633.3/113.7))^(1/15)) * rates[3]/rates[1])) ^15*(633.3/113.7)/(333.4/59))/0.33
+extras[10,3] <- (1-(1-((1-((333.4/59) * 0.67/(633.3/113.7))^(1/15)) * rates[4]/rates[1])) ^15*(633.3/113.7)/(333.4/59))/0.33
+extras <- as.data.frame(extras)
+extras$country <- c(c('USA', 'JPN', 'DEU', 'RUS', 'CAN', 'KOR', 'BRA', 'GBR'), 'CHN', 'IND')
+xtable(extras)
