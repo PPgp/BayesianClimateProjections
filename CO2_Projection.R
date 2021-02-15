@@ -596,6 +596,107 @@ get.ipat.components.bycountry <- function(tech.projections, gdp.projections,
   data.ipat.bycountry
 }
 
+get.ipat.annual.components.bycountry <- function(tech.projections, gdp.projections, 
+                                                 frontier.projections, tech.USA.projections,
+                                                 pop.projections, co2.projections,
+                                                 year.sequence) {
+  # get.ipat.components.bycountry reformats projections of IPAT components
+  # at a country level.
+  
+  # US is special
+  pop.USA.projections <- pop.projections[1,]
+  stopifnot(pop.USA.projections$Isocode == "USA")
+  pop.projections.mod <- pop.projections[-1,]
+  stopifnot(all(pop.projections.mod$Isocode == gdp.projections$Isocode))
+  # browser()
+  #  names.tmp <- c("Year", "Pop", "GDP", "GDPpercapita", "CO2", "CO2percapita", "Tech")
+  names.tmp <- c("Year", "Pop", "GDP", "GDPpercapita", "FrontierGap", "CO2", "CO2percapita", "Tech")
+  data.ipat.bycountry <- list()
+  # US first:
+  data.ipat.bycountry[["USA"]] <- data.frame(matrix(nrow=length(year.sequence), ncol=length(names.tmp)))
+  names(data.ipat.bycountry[["USA"]]) <- names.tmp
+  data.ipat.bycountry[["USA"]]$Year <- year.sequence
+  rowindex <- 0
+  co2.rowindex.USA <- which(co2.projections$Isocode == "USA")
+  tech.rowindex.USA <- which(tech.projections$Isocode == "USA")
+  for (year in year.sequence) {
+    rowindex <- rowindex + 1
+    var.name.gdp <- paste0("GDP", year)
+    var.name.co2 <- paste0("CO2", year)
+    var.name.tech <- paste0("Tech", year)
+    data.ipat.bycountry[["USA"]][rowindex, "GDPpercapita"] <- frontier.projections[var.name.gdp]
+    data.ipat.bycountry[["USA"]][rowindex, "CO2"] <- co2.projections[co2.rowindex.USA, var.name.co2]
+    data.ipat.bycountry[["USA"]][rowindex, "Tech"] <- tech.USA.projections[var.name.tech]
+    if (year %% 5 == 0)
+    {
+      var.name.pop <- paste0("Pop", year)
+      data.ipat.bycountry[["USA"]][rowindex, "Pop"] <- pop.USA.projections[var.name.pop]
+      
+    }
+    else
+    {
+      year.left <- year - year %% 5
+      year.right <- year.left + 5
+      var.name.pop.left <- paste0("Pop", year.left)
+      var.name.pop.right <- paste0("Pop", year.right)
+      data.ipat.bycountry[["USA"]][rowindex, "Pop"] <- 
+        pop.USA.projections[var.name.pop.right] * ((year %% 5) / 5) + 
+        pop.USA.projections[var.name.pop.left] * (1 - (year %% 5) / 5)
+      
+    }
+  }
+  data.ipat.bycountry[["USA"]][, "FrontierGap"] <- rep(0, length(year.sequence))
+  data.ipat.bycountry[["USA"]]$CO2percapita <- data.ipat.bycountry[["USA"]]$CO2 /
+    (10^3 * data.ipat.bycountry[["USA"]]$Pop)
+  data.ipat.bycountry[["USA"]]$GDP <- data.ipat.bycountry[["USA"]]$GDPpercapita *
+    (10^3 * data.ipat.bycountry[["USA"]]$Pop)
+  
+  for (iso in gdp.projections$Isocode) {
+    data.ipat.bycountry[[iso]] <- data.frame(matrix(nrow=length(year.sequence), ncol=length(names.tmp)))
+    names(data.ipat.bycountry[[iso]]) <- names.tmp
+    data.ipat.bycountry[[iso]]$Year <- year.sequence
+    pop.rowindex <- which(pop.projections$Isocode == iso)
+    gdp.rowindex <- which(gdp.projections$Isocode == iso)
+    co2.rowindex <- which(co2.projections$Isocode == iso)
+    tech.rowindex <- which(tech.projections$Isocode == iso)
+    rowindex <- 0
+    for (year in year.sequence) {
+      rowindex <- rowindex + 1
+      var.name.gdp <- paste0("GDP", year)
+      var.name.co2 <- paste0("CO2", year)
+      var.name.tech <- paste0("Tech", year)
+      # Confusingly, for hte projections GDP is GDP per capita while CO2 is total co2 emissions
+      data.ipat.bycountry[[iso]][rowindex, "GDPpercapita"] <- gdp.projections[gdp.rowindex, var.name.gdp]
+      data.ipat.bycountry[[iso]][rowindex, "CO2"] <- co2.projections[co2.rowindex, var.name.co2]
+      data.ipat.bycountry[[iso]][rowindex, "Tech"] <- tech.projections[tech.rowindex, var.name.tech]
+      if (year %% 5 == 0)
+      {
+        var.name.pop <- paste0("Pop", year)
+        data.ipat.bycountry[[iso]][rowindex, "Pop"] <- pop.projections[pop.rowindex, var.name.pop]
+      }
+      else
+      {
+        year.left <- year - year %% 5
+        year.right <- year.left + 5
+        var.name.pop.left <- paste0("Pop", year.left)
+        var.name.pop.right <- paste0("Pop", year.right)
+        data.ipat.bycountry[[iso]][rowindex, "Pop"] <- 
+          pop.projections[pop.rowindex, var.name.pop.right] * ((year %% 5) / 5) + 
+          pop.projections[pop.rowindex, var.name.pop.left] * (1 - (year %% 5) / 5)
+      }
+    }
+    data.ipat.bycountry[[iso]]$FrontierGap <- log(data.ipat.bycountry[["USA"]]$GDPpercapita /
+                                                    data.ipat.bycountry[[iso]]$GDPpercapita)
+    data.ipat.bycountry[[iso]]$CO2percapita <- data.ipat.bycountry[[iso]]$CO2 /
+      (10^3 * data.ipat.bycountry[[iso]]$Pop)
+    data.ipat.bycountry[[iso]]$GDP <- data.ipat.bycountry[[iso]]$GDPpercapita *
+      (10^3 * data.ipat.bycountry[[iso]]$Pop)
+  } 
+  
+  data.ipat.bycountry
+}
+
+
 
 get.ipat.components.ssa <- function(tech.projections, gdp.projections, 
                                     pop.projections, co2.projections,
@@ -1768,6 +1869,16 @@ evaluate.projections <- function(data.medium.full, model.results,
   ipat.quantiles.bycountry <- get.ipat.quantiles.bycountry(ipat.components.bycountry,
                                                            quantiles=quantiles)
   
+  ipat.annual.components.bycountry <- lapply(1:length(data.proj), function(i) {
+    x <- data.proj[[i]]
+    get.ipat.annual.components.bycountry(x$TechData, x$GDPData, x$GDPFrontier, x$TechUSA,
+                                         preds.countries.trajs[[i]], co2.annual.projections[[i]],
+                                         year.sequence=year.start:year.end)
+  })
+  
+  ipat.annual.quantiles.bycountry <- get.ipat.quantiles.bycountry(ipat.annual.components.bycountry,
+                                                                  quantiles=quantiles)
+  
   # Look at gap from the frontier.
   frontier.gaps.pred <- list()
   for (iso in names(ipat.components.bycountry[[1]])) {
@@ -1934,8 +2045,11 @@ evaluate.projections <- function(data.medium.full, model.results,
                 co2.5regions.quants=co2.5regions.quants,
                 ipat.quantiles=ipat.quantiles,
                 ipat.components.bycountry=ipat.components.bycountry,
+                ipat.annual.quantiles=ipat.annual.quantiles,
+                ipat.annual.components.bycountry=ipat.annual.components.bycountry,
                 frontier.gaps.pred=frontier.gaps.pred,
                 ipat.quantiles.bycountry=ipat.quantiles.bycountry,
+                ipat.annual.quantiles.bycountry=ipat.annual.quantiles.bycountry,
                 quantiles=quantiles))
   }
 }
@@ -1964,6 +2078,62 @@ rcp.carbon.yearly$Scenario <- c("RCP6.0", "RCP4.5", "RCP2.6", "RCP8.5")
 
 rcp.carbon.cum <- rcp.carbon.yearly[, c("Scenario", "Unit",
                                         paste0("Carbon", seq(2010, 2100, by=10)))]
+
+rcp.carbon.yearly.complete <- rcp.carbon.yearly[, 1:2]
+for (year in 2005:2100)
+{
+  var.name <- paste0('Carbon', year)
+  if (year == 2005 || (year %% 10 == 0 && year <= 2100))
+  {
+    rcp.carbon.yearly.complete[, var.name] <- rcp.carbon.yearly[, var.name]
+  }
+  else if (year < 2010)
+  {
+    rcp.carbon.yearly.complete[, var.name] <- (2010 - year)/5 * rcp.carbon.yearly[, 'Carbon2005'] + 
+      (year - 2005)/5 * rcp.carbon.yearly[, 'Carbon2010']
+  }
+  else if (year < 2100)
+  {
+    rcp.carbon.yearly.complete[, var.name] <- (10 - year %% 10) / 10 * rcp.carbon.yearly[, paste0('Carbon', year - (year %% 10))] + 
+      (year %% 10) / 10 * rcp.carbon.yearly[, paste0('Carbon', year - (year %% 10) + 10)]
+  }
+  else
+  {
+    rcp.carbon.yearly.complete[, var.name] <- rcp.carbon.yearly[, 'Carbon2100']
+  }
+}
+
+rcp.carbon.cum.complete <- rcp.carbon.yearly.complete
+for (i in 1:4)
+{
+  rcp.carbon.cum.complete[i, 4:98] <- cumsum(as.numeric(rcp.carbon.yearly.complete[i, 4:98]))
+}
+
+rcp.carbon.cum.complete <- rcp.carbon.cum.complete[,-3]
+
+rcp.carbon.cum.complete.adjusted <- t(rcp.carbon.cum.complete[, -c(1,2)])
+rcp.carbon.cum.complete.adjusted <- as.data.frame(rcp.carbon.cum.complete.adjusted)
+rcp.carbon.cum.complete.adjusted <- rcp.carbon.cum.complete.adjusted[, c(3,2,1,4)]
+rcp.carbon.cum.complete.adjusted$year <- 2006:2100
+names(rcp.carbon.cum.complete.adjusted)[1:4] <- paste0('rcp', c(26, 45, 60, 85)) 
+
+rcp.carbon.cum <- rcp.carbon.yearly[, c("Scenario", "Unit",
+                                        paste0("Carbon", seq(2010, 2100, by=10)))]
+carbon.cum <- rcp.carbon.yearly[, paste0('Carbon', 2005)] * 2.5 + rcp.carbon.yearly[, paste0('Carbon', 2010)] * 2.5 
+for (year in seq(2010, 2100, by=10)) {
+  var.name.tmp <- paste0("Carbon", year)
+  if (year == 2010) {
+    rcp.carbon.cum[, var.name.tmp] <- carbon.cum
+    carbon.cum <- carbon.cum + 5*rcp.carbon.yearly[, var.name.tmp]
+  } else if (year == 2100) {
+    carbon.cum <- carbon.cum + 5*rcp.carbon.yearly[, var.name.tmp]
+    rcp.carbon.cum[, var.name.tmp] <- carbon.cum
+  } else {
+    carbon.cum <- carbon.cum + 5*rcp.carbon.yearly[, var.name.tmp]
+    rcp.carbon.cum[, var.name.tmp] <- carbon.cum
+    carbon.cum <- carbon.cum + 5*rcp.carbon.yearly[, var.name.tmp]
+  }
+}
 carbon.cum <- rep(0, 4)
 for (year in seq(2010, 2100, by=10)) {
   var.name.tmp <- paste0("Carbon", year)
@@ -2177,6 +2347,6 @@ proj.evals.2015.ar1.const <- evaluate.projections(data.medium, model.ar1.const.r
                                                   year.start=2015, year.end=2100,
                                                   outofsample.validate=F,
                                                   quantiles=c(0.025, 0.05, 0.5, 0.95, 0.975))
-save(proj.evals.2015.ar1.const, "proj_evals_ar1const_2015.rda")
+save(proj.evals.2015.ar1.const, file=paste0(data.location, "proj_evals_ar1const_2015.rda"))
 load(file=paste0(data.location, "proj_evals_ar1const_2015.rda"))
 
