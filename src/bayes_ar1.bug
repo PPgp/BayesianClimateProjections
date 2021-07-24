@@ -9,9 +9,7 @@ model {
   }
   for (t in 1:(n_years-1))
   {
-#    observed_anomaly[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]) + model_forecast[t + 1] + delta[t + 1], tau_w)
-    true_anomaly[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]) + model_forecast[t + 1], tau_w)
-#   z[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]), tau_w)
+    observed_anomaly[t + 1] ~ dnorm(rho * (true_anomaly[t] - model_forecast[t]) + model_forecast[t + 1] + delta[t + 1], tau_w)
   }
   rho ~ dunif(0, 1)
 #  tau_w ~ dgamma(1, 1)
