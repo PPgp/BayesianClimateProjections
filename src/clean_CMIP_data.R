@@ -12,8 +12,11 @@ string_part6 <- sapply(all_files, function(x) {return (strsplit(x, '_')[[1]][6])
 all_files_split <- data.frame(v1 = string_part1, v2 = string_part2, v3 = string_part3,
                               v4 = string_part4, v5 = string_part5, v6 = string_part6)
 
-temp <- read.table('had4_krig_annual_v2_0_0.txt')
-real_data <- temp
+real_data <- read.table('had4_krig_annual_v2_0_0.txt')
+real_data$V2 <- real_data$V2 + 287.75 - real_data$V2[156]
+real_data$V6 <- real_data$V2 - 273.15
+save(real_data, file = 'real_data.Rda')
+
 
 all_data <- list()
 count <- 0
@@ -79,7 +82,6 @@ cleaned_all_data$Average$Quant975 <- apply(cleaned_all_data$Average[,-1], 1, qua
 cleaned_all_data$Average_Diff <- cleaned_all_data$Average[, 1:344]
 
 save(cleaned_all_data, file = 'cleaned_all_data.Rda')
-save(real_data, file = 'real_data.Rda')
 
 
 
