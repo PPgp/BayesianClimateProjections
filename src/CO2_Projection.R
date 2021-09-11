@@ -1583,6 +1583,7 @@ evaluate.projections <- function(data.medium.full, model.results,
     co2.projections <- lapply(model.results$co2.projections, function(x)
       subset(x, Isocode %in% isos.include))
   }
+  year.start.tmp <- year.start
   # Get worldwide data
   trajs.worldwide <- lapply(1:length(data.proj), function(i) {
     x <- data.proj[[i]]
