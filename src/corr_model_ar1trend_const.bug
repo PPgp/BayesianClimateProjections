@@ -40,7 +40,7 @@ model {
 # t=1 is the 1961/1960 year combo, so t=30 is 1990, when we should be at zero by centering
     mu.tmp.USA[t] <- mu.eta * (t - 30) +
                 mu.beta * tau.old.USA[t] -
-                delta.USA - rho * 
+                delta.USA + rho * 
                 (sig.eps.USA / sig.frontier) *
                 (frontier.change[t] - gamma.tmp[t])
     tau.new.USA[t] ~ dnorm(mu.tmp.USA[t], tau.eps.tmp.USA)
